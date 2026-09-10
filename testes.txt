@@ -16,4 +16,11 @@ curl.exe --% -X PUT http://localhost:3333/api/v1/pokemons/25 -H "Content-Type: a
 DELETE — Remover Pikachu
 curl.exe -X DELETE "http://localhost:3333/api/v1/pokemons/25"
 
+PTCH
+Invoke-RestMethod `
+  -Method PATCH `
+  -Uri "http://localhost:3333/api/v1/pokemons/25" `
+  -ContentType "application/json" `
+  -Body '{"hp":70}'
+
 git remote set-url origin https://github.com/Gbmott4/Pokemon-menager-API
