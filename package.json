@@ -1,0 +1,38 @@
+{
+  "name": "pokemon-manager-api",
+  "version": "1.0.0",
+  "description": "O HTTP (Hypertext Transfer Protocol) é o protocolo de comunicação utilizado na web. Ele define como as mensagens são formatadas e transmitidas entre clientes (como navegadores ou aplicativos) e servidores. O HTTP é baseado em um modelo de requisição e resposta, onde o cliente envia uma requisição ao servidor, que processa a solicitação e retorna uma resposta.",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx watch src/main/server.ts",
+    "build": "tsc",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "prettier": "^3.9.6",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarlosEduAC/express-sample.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/CarlosEduAC/express-sample/issues"
+  },
+  "homepage": "https://github.com/CarlosEduAC/express-sample#readme"
+}
