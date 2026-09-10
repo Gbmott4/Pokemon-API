@@ -1,106 +1,128 @@
 # 🎮 PokéManager API — Módulo 1
 
-![Node.js](https://img.shields.io/badge/Node.js-v20-green?logo=nodedotjs)
-![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-blue?logo=typescript)
-![Express](https://img.shields.io/badge/Express-v4.0-lightgrey?logo=express)
-![Clean Architecture](https://img.shields.io/badge/Architecture-Clean--Arch-orange)
-![Swagger](https://img.shields.io/badge/Documentation-Swagger-brightgreen?logo=swagger)
+API RESTful para gerenciamento de um catálogo de Pokémon, desenvolvida na disciplina de **Desenvolvimento de APIs Modernas**.
 
-API RESTful para gerenciamento do catálogo e times de Pokémons desenvolvida na disciplina de **Desenvolvimento de APIs Modernas**.
-
-Este repositório contempla a **Entrega 1 (Módulo 1)**, focada no desacoplamento de código via **Clean Architecture**, repositório em memória (_In-Memory_), documentação interativa com **Swagger** e tratamento global de erros.
+Este repositório contempla, até o momento, a **primeira entrega (Módulo 1)**, focada no desacoplamento do código por meio da **Clean Architecture**, persistência em memória (_In-Memory_), documentação interativa com **Swagger/OpenAPI** e organização das regras de negócio em casos de uso.
 
 ---
 
 ## 🏛️ Arquitetura do Projeto
 
-O projeto segue os princípios da **Clean Architecture (Arquitetura Limpa)**, garantindo independência de frameworks, testabilidade e separação clara de responsabilidades:
+O projeto segue os princípios da **Clean Architecture (Arquitetura Limpa)**, buscando manter as regras de negócio independentes de frameworks e detalhes externos, além de proporcionar separação clara de responsabilidades.
 
 ```text
 src/
-├── domain/                  # [Camada 1] Entidades de negócio e contratos (Interfaces)
-│   ├── entities/            # Regras de negócio puras (ex: Pokemon)
-│   ├── errors/              # Exceção de domínio (AppError)
-│   └── repositories/        # Contrato IPokemonRepository
+├── domain/                  # [Camada 1] Núcleo da aplicação: define o negócio sem depender de Express, banco de dados ou outras tecnologias
+│   ├── entities/            # Entidades do sistema e suas regras/validações, como a classe Pokemon
+│   ├── errors/              # Erros relacionados às regras da aplicação, como ResourceNotFoundError
+│   └── repositories/        # Interfaces que definem o que um repositório deve fazer, sem definir como os dados são armazenados
 │
-├── application/             # [Camada 2] Casos de Uso (Lógica de Aplicação)
-│   └── use-cases/           # CreatePokemon, ListPokemons, GetPokemonById, etc.
+├── application/             # [Camada 2] Contém a lógica dos casos de uso e coordena as operações do sistema
+│   ├── dtos/                # Define o formato dos dados utilizados pelos casos de uso (Create, Update e Patch)
+│   └── use-cases/           # Implementa as ações da aplicação, como criar, buscar, atualizar e remover Pokémon
 │
-├── infrastructure/          # [Camada 3] Frameworks, Banco de Dados e HTTP
-│   ├── database/            # Repositório em memória (InMemoryPokemonRepository)
-│   └── http/                # Controllers, Routers e Middlewares do Express
+├── infrastructure/          # [Camada 3] Implementa os detalhes externos necessários para a aplicação funcionar
+│   ├── database/            # Implementações responsáveis pela persistência dos dados
+│   │   └── in-memory/       # Repositório que armazena temporariamente os Pokémon em um array na memória
+│   └── http/                # Responsável pela comunicação da aplicação através do protocolo HTTP
+│       ├── controllers/     # Recebe as requisições HTTP, chama os casos de uso e monta as respostas
+│       └── routes/          # Define os métodos e URLs da API e direciona cada requisição ao controller
 │
-└── main/                    # [Camada 4] Ponto de Composição (Setup da Aplicação)
-    ├── config/              # Configurações gerais e especificação Swagger/OpenAPI
-    ├── factories/           # Instanciação e Injeção de Dependências
-    └── server.ts            # Inicialização do Servidor HTTP
+└── main/                    # [Camada 4] Ponto de composição e inicialização da aplicação
+    ├── config/              # Configurações gerais, incluindo a geração e configuração do Swagger/OpenAPI
+    ├── factories/           # Realiza a instanciação e injeção das dependências
+    └── server.ts            # Configura o Express, registra as rotas e inicia o servidor HTTP
 ```
+
+### Fluxo principal da aplicação
+
+```text
+Cliente HTTP
+    ↓
+Express / Routes
+    ↓
+PokemonController
+    ↓
+Use Cases
+(List / GetById / Create / Update / Patch / Delete)
+    ↓
+IPokemonRepository
+    ↑
+InMemoryPokemonRepository
+```
+
+O `main` funciona como ponto de composição da aplicação. Por meio da factory, são criadas e conectadas as dependências entre o repositório, os casos de uso e o controller. O servidor também registra as rotas HTTP e disponibiliza a documentação Swagger.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- Runtime: Node.js (v20+)
-- Linguagem: TypeScript
-- Framework Web: Express
-- Execução em Dev: tsx
-- Documentação: Swagger UI Express + swagger-autogen
-- Qualidade/Padrões: ESLint & Prettier
+- **Runtime:** Node.js
+- **Linguagem:** TypeScript
+- **Framework Web:** Express
+- **Execução em desenvolvimento:** tsx
+- **Documentação:** OpenAPI 3.0, Swagger UI Express e swagger-autogen
+- **Qualidade e padronização:** ESLint e Prettier
 
 ---
 
 ## 🚀 Como Executar o Projeto Localmente
 
-Pré-requisitos
+### Pré-requisitos
 
-- Node.js (v18 ou superior)
-- npm ou pnpm instalado
+- Node.js 18 ou superior
+- npm instalado
+- Git instalado
 
-Passo a Passo
+### Passo a passo
 
 ```bash
-
 # 1. Clonar o repositório
-$ git clone [https://github.com/SEU_USUARIO/pokemanager-api.git](https://github.com/SEU_USUARIO/pokemanager-api.git)
+git clone https://github.com/Gbmott4/Pokemon-API
 
 # 2. Acessar a pasta do projeto
-$ cd pokemanager-api
+cd pokemon-manager-api
 
 # 3. Instalar as dependências
-$ npm install
+npm install
 
-# 4. Executar o projeto em modo de desenvolvimento
-$ npm run start
-
+# 4. Executar a aplicação
+npm start
 ```
 
-O servidor iniciará na porta 3333:
+Ao executar `npm start`, a documentação Swagger é gerada automaticamente antes da inicialização do servidor.
 
-- 🚀 API Base URL: <http://localhost:3333/api/v1>
-- 📖 Documentação Swagger: <http://localhost:3333/api/docs>
+O servidor será iniciado na porta `3333`:
 
----
-
-## 📖 Documentação dos Endpoints (RESTful)
-
-A documentação interativa completa está acessível via Swagger no navegador em /api/docs.
-
-| Método | Endpoint             | Descrição                                     | Status de Sucesso |
-| ------ | -------------------- | --------------------------------------------- | ----------------- |
-| POST   | /api/v1/pokemons     | Cadastra um novo Pokémon no catálogo          | 201 Created       |
-| GET    | /api/v1/pokemons     | Lista Pokémons (com suporte a ?type=Electric) | 200 OK            |
-| GET    | /api/v1/pokemons/:id | Busca um Pokémon pelo ID                      | 200 OK            |
-| PUT    | /api/v1/pokemons/:id | Atualiza os dados de um Pokémon               | 200 OK            |
-| DELETE | /api/v1/pokemons/:id | Remove um Pokémon do catálogo                 | 204 No Content    |
+- 🚀 **API:** `http://localhost:3333/api/v1`
+- 📖 **Swagger UI:** `http://localhost:3333/api/docs`
 
 ---
 
-## 🧪 Exemplos de Requisições (cURL)
+## 📖 Documentação dos Endpoints
 
-### Cadastrar Pokémon
+A documentação interativa completa está disponível através do Swagger UI em `/api/docs`.
+
+| Método | Endpoint               | Descrição                                                | Status de sucesso |
+| ------ | ---------------------- | -------------------------------------------------------- | ----------------- |
+| POST   | `/api/v1/pokemons`     | Cadastra um novo Pokémon no catálogo                     | `201 Created`     |
+| GET    | `/api/v1/pokemons`     | Lista os Pokémon, com suporte ao filtro `?type=Electric` | `200 OK`          |
+| GET    | `/api/v1/pokemons/:id` | Busca um Pokémon pelo ID                                 | `200 OK`          |
+| PUT    | `/api/v1/pokemons/:id` | Atualiza completamente os dados de um Pokémon            | `200 OK`          |
+| PATCH  | `/api/v1/pokemons/:id` | Atualiza parcialmente os dados de um Pokémon             | `200 OK`          |
+| DELETE | `/api/v1/pokemons/:id` | Remove um Pokémon do catálogo                            | `204 No Content`  |
+
+### PUT vs. PATCH
+
+O endpoint `PUT` realiza uma atualização completa dos dados atualizáveis do Pokémon, enquanto o `PATCH` permite alterar apenas os campos enviados na requisição.
+
+---
+
+## 🧪 Exemplos de Requisições
+
+### Cadastrar um Pokémon
 
 ```bash
-
 curl --request POST \
   --url http://localhost:3333/api/v1/pokemons \
   --header 'Content-Type: application/json' \
@@ -112,36 +134,44 @@ curl --request POST \
     "attack": 55,
     "defense": 40
   }'
-
 ```
 
-### Listar com Filtro de Tipo
+### Listar Pokémon por tipo
 
 ```bash
-
 curl --request GET \
   --url 'http://localhost:3333/api/v1/pokemons?type=Electric'
-
 ```
+
+### Atualizar parcialmente um Pokémon
+
+```bash
+curl --request PATCH \
+  --url http://localhost:3333/api/v1/pokemons/25 \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "hp": 70
+  }'
+```
+
+> **Observação:** nesta etapa do projeto, os dados são armazenados apenas em memória. Portanto, os Pokémon cadastrados são perdidos quando o servidor é reiniciado.
 
 ---
 
-## 🛡️ Padronização de Erros
+## 📚 Documentação Interativa
 
-A API utiliza a classe AppError e um Middleware Global de Erros, garantindo respostas estruturadas:
+A API utiliza **OpenAPI 3.0** com `swagger-autogen` para gerar automaticamente sua especificação a partir das rotas e anotações do código.
 
-```json
-{
-  "status": "error",
-  "statusCode": 404,
-  "message": "Pokémon não encontrado no catálogo."
-}
-```
+Com o servidor em execução, acesse:
+
+`http://localhost:3333/api/docs`
+
+A interface Swagger UI permite visualizar os endpoints, parâmetros, schemas, códigos de resposta e realizar requisições diretamente pelo navegador utilizando **Try it out**.
 
 ---
 
 ## 👤 Autor
 
-Desenvolvido por [Seu Nome Aqui]
+Desenvolvido por **Gabriel Neves Motta Oliveira**.
 
 Estudante de Ciência da Computação.
