@@ -14,7 +14,7 @@ O projeto segue os princípios da **Clean Architecture (Arquitetura Limpa)**, bu
 src/
 ├── domain/                  # [Camada 1] Núcleo da aplicação: define o negócio sem depender de Express, banco de dados ou outras tecnologias
 │   ├── entities/            # Entidades do sistema e suas regras/validações, como a classe Pokemon
-│   ├── errors/              # Erros relacionados às regras da aplicação, como ResourceNotFoundError
+│   ├── errors/              # Erros da aplicação, como AppError
 │   └── repositories/        # Interfaces que definem o que um repositório deve fazer, sem definir como os dados são armazenados
 │
 ├── application/             # [Camada 2] Contém a lógica dos casos de uso e coordena as operações do sistema
@@ -26,12 +26,14 @@ src/
 │   │   └── in-memory/       # Repositório que armazena temporariamente os Pokémon em um array na memória
 │   └── http/                # Responsável pela comunicação da aplicação através do protocolo HTTP
 │       ├── controllers/     # Recebe as requisições HTTP, chama os casos de uso e monta as respostas
+│       ├── middlewares/     # Middlewares HTTP, incluindo o tratamento global de erros
+│       │   └── error-handler.ts
 │       └── routes/          # Define os métodos e URLs da API e direciona cada requisição ao controller
 │
 └── main/                    # [Camada 4] Ponto de composição e inicialização da aplicação
     ├── config/              # Configurações gerais, incluindo a geração e configuração do Swagger/OpenAPI
     ├── factories/           # Realiza a instanciação e injeção das dependências
-    └── server.ts            # Configura o Express, registra as rotas e inicia o servidor HTTP
+    └── server.ts            # Configura o Express, registra as rotas, middlewares e inicia o servidor HTTP
 ```
 
 ### Fluxo principal da aplicação
@@ -51,7 +53,25 @@ IPokemonRepository
 InMemoryPokemonRepository
 ```
 
-O `main` funciona como ponto de composição da aplicação. Por meio da factory, são criadas e conectadas as dependências entre o repositório, os casos de uso e o controller. O servidor também registra as rotas HTTP e disponibiliza a documentação Swagger.
+O `main` funciona como ponto de composição da aplicação. Por meio da factory, são criadas e conectadas as dependências entre o repositório, os casos de uso e o controller. O servidor também registra as rotas HTTP, o middleware global de tratamento de erros e disponibiliza a documentação Swagger.
+
+### Tratamento de erros
+
+A aplicação utiliza `AppError` para representar erros conhecidos da aplicação, permitindo definir uma mensagem e o código HTTP correspondente.
+
+Esses erros são tratados pelo middleware global `errorHandler`, responsável por convertê-los em respostas HTTP padronizadas.
+
+Por exemplo, ao buscar um Pokémon inexistente, a API pode retornar:
+
+```json
+{
+  "status": "error",
+  "statusCode": 404,
+  "message": "Pokémon não encontrado no catálogo."
+}
+```
+
+Erros inesperados são registrados internamente e retornam ao cliente uma resposta genérica com status `500 Internal Server Error`, evitando a exposição de detalhes internos da aplicação.
 
 ---
 
@@ -152,6 +172,25 @@ curl --request PATCH \
   --data '{
     "hp": 70
   }'
+```
+
+### Exemplo de erro
+
+Ao tentar buscar um Pokémon que não existe:
+
+```bash
+curl --request GET \
+  --url http://localhost:3333/api/v1/pokemons/999
+```
+
+A API retorna uma resposta padronizada:
+
+```json
+{
+  "status": "error",
+  "statusCode": 404,
+  "message": "Pokémon não encontrado no catálogo."
+}
 ```
 
 > **Observação:** nesta etapa do projeto, os dados são armazenados apenas em memória. Portanto, os Pokémon cadastrados são perdidos quando o servidor é reiniciado.
