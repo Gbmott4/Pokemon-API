@@ -3,9 +3,7 @@ import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerReposi
 import { AppError } from '../../domain/errors/app-error';
 
 export class GetTrainerByIdUseCase {
-  constructor(
-    private trainerRepository: IPgTrainerRepository,
-  ) {}
+  constructor(private trainerRepository: IPgTrainerRepository) {}
 
   async execute(id: string): Promise<Trainer> {
     const trainer = await this.trainerRepository.findById(id);

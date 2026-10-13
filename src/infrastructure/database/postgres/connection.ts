@@ -14,8 +14,5 @@ postgresPool.on('connect', () => {
 });
 
 postgresPool.on('error', (err) => {
-  console.error(
-    '💥 [database]: Erro inesperado no pool do PostgreSQL:',
-    err,
-  );
+  console.error('💥 [database]: Erro inesperado no pool do PostgreSQL:', err);
 });

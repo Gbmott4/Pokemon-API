@@ -37,7 +37,7 @@ export class PokemonController {
   }
 
   async create(req: Request, res: Response) {
-    const { id, name, type, hp, attack, defense, level} = req.body;
+    const { id, name, type, hp, attack, defense, level } = req.body;
 
     const pokemon = await this.createPokemonUseCase.execute({
       id,
@@ -57,7 +57,7 @@ export class PokemonController {
 
   async update(req: Request, res: Response) {
     const id = String(req.params.id);
-    const { name, type, hp, attack, defense, level} = req.body;
+    const { name, type, hp, attack, defense, level } = req.body;
 
     const pokemon = await this.updatePokemonUseCase.execute({
       id,
@@ -94,7 +94,7 @@ export class PokemonController {
       hp,
       attack,
       defense,
-      level
+      level,
     });
 
     return res.status(200).json({
@@ -102,14 +102,14 @@ export class PokemonController {
       data: pokemon,
     });
   }
-async updateLevel(req: Request, res: Response) {
-  const id = String(req.params.id);
-  const { level } = req.body;
+  async updateLevel(req: Request, res: Response) {
+    const id = String(req.params.id);
+    const { level } = req.body;
 
-  await this.updatePokemonLevelUseCase.execute(id, level);
+    await this.updatePokemonLevelUseCase.execute(id, level);
 
-  return res.status(200).json({
-    message: 'Nível do Pokémon atualizado com sucesso!',
-  });
-}
+    return res.status(200).json({
+      message: 'Nível do Pokémon atualizado com sucesso!',
+    });
+  }
 }

@@ -1,4 +1,3 @@
-
 import { Trainer } from '../../../domain/entities/trainer';
 import { IPgTrainerRepository } from '../../../domain/repositories/IPgTrainerRepository';
 import { AppError } from '../../../domain/errors/app-error';
@@ -69,7 +68,7 @@ export class PgTrainerRepository implements IPgTrainerRepository {
       row.name,
       row.email,
       row.city,
-      row.created_at?? undefined,
+      row.created_at ?? undefined,
     );
   }
 

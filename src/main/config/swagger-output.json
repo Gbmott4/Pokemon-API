@@ -88,7 +88,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "ID do Pokémon"
+            "description": "ID numérico do Pokémon",
+            "example": 1
           }
         ],
         "responses": {
@@ -98,6 +99,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Pokemon"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -128,7 +139,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "ID do Pokémon"
+            "description": "ID numérico do Pokémon",
+            "example": 1
           }
         ],
         "responses": {
@@ -136,7 +148,7 @@
             "description": "Pokémon atualizado com sucesso"
           },
           "400": {
-            "description": "Dados inválidos",
+            "description": "ID ou dados inválidos",
             "content": {
               "application/json": {
                 "schema": {
@@ -181,12 +193,23 @@
             "schema": {
               "type": "string"
             },
-            "description": "ID do Pokémon"
+            "description": "ID numérico do Pokémon",
+            "example": 1
           }
         ],
         "responses": {
           "204": {
             "description": "Pokémon removido com sucesso"
+          },
+          "400": {
+            "description": "ID inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "404": {
             "description": "Pokémon não encontrado",
@@ -214,7 +237,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "ID do Pokémon"
+            "description": "ID numérico do Pokémon",
+            "example": 1
           }
         ],
         "responses": {
@@ -222,7 +246,7 @@
             "description": "Pokémon atualizado parcialmente com sucesso"
           },
           "400": {
-            "description": "Dados inválidos",
+            "description": "ID ou dados inválidos",
             "content": {
               "application/json": {
                 "schema": {
@@ -269,7 +293,8 @@
             "schema": {
               "type": "string"
             },
-            "description": "ID do Pokémon"
+            "description": "ID numérico do Pokémon",
+            "example": 1
           }
         ],
         "responses": {
@@ -277,7 +302,14 @@
             "description": "Nível atualizado com sucesso"
           },
           "400": {
-            "description": "Nível inválido"
+            "description": "ID ou nível inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "404": {
             "description": "Pokémon não encontrado"
@@ -295,6 +327,8 @@
                 "properties": {
                   "level": {
                     "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
                     "example": 10,
                     "description": "Novo nível do Pokémon"
                   }

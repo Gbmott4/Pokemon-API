@@ -1,4 +1,3 @@
-
 import { AppError } from '../../domain/errors/app-error';
 import { TrainerCapture } from '../../domain/entities/trainer-capture';
 import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerRepository';

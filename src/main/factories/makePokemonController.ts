@@ -17,7 +17,9 @@ export function makePokemonController() {
   const updatePokemonUseCase = new UpdatePokemonUseCase(pokemonRepository);
   const deletePokemonUseCase = new DeletePokemonUseCase(pokemonRepository);
   const patchPokemonUseCase = new PatchPokemonUseCase(pokemonRepository);
-  const updatePokemonLevelUseCase = new UpdatePokemonLevelUseCase(pokemonRepository,);
+  const updatePokemonLevelUseCase = new UpdatePokemonLevelUseCase(
+    pokemonRepository,
+  );
 
   const pokemonController = new PokemonController(
     listPokemonsUseCase,

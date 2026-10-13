@@ -1,11 +1,8 @@
-
 import { Request, Response } from 'express';
 import { GetTrainerTeamUseCase } from '../../../application/use-cases/GetTrainerTeamUseCase';
 
 export class GetTrainerTeamController {
-  constructor(
-    private getTrainerTeamUseCase: GetTrainerTeamUseCase,
-  ) {}
+  constructor(private getTrainerTeamUseCase: GetTrainerTeamUseCase) {}
 
   async handle(req: Request, res: Response) {
     const trainerId = req.params.trainerId;
