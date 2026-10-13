@@ -1,4 +1,3 @@
-
 export class TrainerCapture {
   constructor(
     public readonly id: string,

@@ -1,11 +1,8 @@
-
 import { Request, Response } from 'express';
 import { CapturePokemonUseCase } from '../../../application/use-cases/CapturePokemonUseCase';
 
 export class CapturePokemonController {
-  constructor(
-    private capturePokemonUseCase: CapturePokemonUseCase,
-  ) {}
+  constructor(private capturePokemonUseCase: CapturePokemonUseCase) {}
 
   async handle(req: Request, res: Response) {
     const trainerId = req.params.trainerId;

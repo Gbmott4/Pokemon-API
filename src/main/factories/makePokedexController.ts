@@ -5,9 +5,7 @@ import { PokedexController } from '../../infrastructure/http/controllers/Pokedex
 export function makePokedexController() {
   const pokeApiGateway = new PokeApiGateway();
 
-  const searchPokemonUseCase = new SearchPokemonUseCase(
-    pokeApiGateway,
-  );
+  const searchPokemonUseCase = new SearchPokemonUseCase(pokeApiGateway);
 
   return new PokedexController(searchPokemonUseCase);
 }

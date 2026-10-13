@@ -8,21 +8,13 @@ import { TrainerController } from '../../infrastructure/http/controllers/Trainer
 export function makeTrainerController() {
   const trainerRepository = new PgTrainerRepository();
 
-  const createTrainerUseCase = new CreateTrainerUseCase(
-    trainerRepository,
-  );
+  const createTrainerUseCase = new CreateTrainerUseCase(trainerRepository);
 
-  const getTrainerByIdUseCase = new GetTrainerByIdUseCase(
-    trainerRepository,
-  );
+  const getTrainerByIdUseCase = new GetTrainerByIdUseCase(trainerRepository);
 
-  const updateTrainerUseCase = new UpdateTrainerUseCase(
-    trainerRepository,
-  );
+  const updateTrainerUseCase = new UpdateTrainerUseCase(trainerRepository);
 
-  const deleteTrainerUseCase = new DeleteTrainerUseCase(
-    trainerRepository,
-  );
+  const deleteTrainerUseCase = new DeleteTrainerUseCase(trainerRepository);
 
   return new TrainerController(
     createTrainerUseCase,

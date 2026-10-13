@@ -2,9 +2,7 @@ import { Request, Response } from 'express';
 import { SearchPokemonUseCase } from '../../../application/use-cases/SearchPokemonUseCase';
 
 export class PokedexController {
-  constructor(
-    private searchPokemonUseCase: SearchPokemonUseCase,
-  ) {}
+  constructor(private searchPokemonUseCase: SearchPokemonUseCase) {}
 
   async search(req: Request, res: Response) {
     const name = req.query.name;

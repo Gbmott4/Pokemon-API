@@ -1,11 +1,8 @@
-
 import { TrainerCapture } from '../../../domain/entities/trainer-capture';
 import { ITrainerCaptureRepository } from '../../../domain/repositories/ITrainerCaptureRepository';
 import { prisma } from '../prisma/client';
 
-export class PgTrainerCaptureRepository
-  implements ITrainerCaptureRepository
-{
+export class PgTrainerCaptureRepository implements ITrainerCaptureRepository {
   async create(capture: TrainerCapture): Promise<void> {
     await prisma.trainer_captures.create({
       data: {
@@ -21,9 +18,7 @@ export class PgTrainerCaptureRepository
     });
   }
 
-  async findByTrainerId(
-    trainerId: string,
-  ): Promise<TrainerCapture[]> {
+  async findByTrainerId(trainerId: string): Promise<TrainerCapture[]> {
     const rows = await prisma.trainer_captures.findMany({
       where: { trainer_id: trainerId },
       orderBy: { captured_at: 'asc' },

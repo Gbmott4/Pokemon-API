@@ -1,4 +1,3 @@
-
 import { z } from 'zod';
 
 // Tipos oficiais de Pokémon
@@ -40,10 +39,7 @@ export const createPokemonSchema = z.object({
     .int('O nível deve ser um número inteiro')
     .min(1, 'O nível mínimo é 1')
     .max(100, 'O nível máximo é 100'),
-  trainerId: z
-    .string()
-    .uuid('O trainerId deve ser um UUID válido')
-    .optional(),
+  trainerId: z.string().uuid('O trainerId deve ser um UUID válido').optional(),
 });
 
 export type CreatePokemonInput = z.infer<typeof createPokemonSchema>;
@@ -88,9 +84,7 @@ export const listPokemonsQuerySchema = z.object({
     .pipe(z.number().int().min(1).max(100)),
 });
 
-export type ListPokemonsQuery = z.infer<
-  typeof listPokemonsQuerySchema
->;
+export type ListPokemonsQuery = z.infer<typeof listPokemonsQuerySchema>;
 
 // Captura de Pokémon
 export const capturePokemonSchema = z.object({
@@ -117,6 +111,4 @@ export const searchPokemonQuerySchema = z.object({
     .toLowerCase(),
 });
 
-export type SearchPokemonQuery = z.infer<
-  typeof searchPokemonQuerySchema
->;
+export type SearchPokemonQuery = z.infer<typeof searchPokemonQuerySchema>;

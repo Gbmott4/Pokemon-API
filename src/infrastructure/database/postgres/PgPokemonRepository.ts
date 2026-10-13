@@ -1,4 +1,3 @@
-
 import { Pokemon } from '../../../domain/entities/pokemon';
 import { IPokemonRepository } from '../../../domain/repositories/IPokemonRepository';
 import { prisma } from '../prisma/client';

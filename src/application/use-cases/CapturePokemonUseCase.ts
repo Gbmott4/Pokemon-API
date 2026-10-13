@@ -1,4 +1,3 @@
-
 import { AppError } from '../../domain/errors/app-error';
 import { TrainerCapture } from '../../domain/entities/trainer-capture';
 import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerRepository';
@@ -13,7 +12,8 @@ export class CapturePokemonUseCase {
   constructor(
     private trainerRepository: IPgTrainerRepository,
     private captureRepository: ITrainerCaptureRepository,
-    private pokeApiGateway: PokeApiGateway  ) {}
+    private pokeApiGateway: PokeApiGateway,
+  ) {}
 
   async execute(data: CapturePokemonDTO): Promise<TrainerCapture> {
     const trainer = await this.trainerRepository.findById(data.trainerId);
@@ -33,10 +33,7 @@ export class CapturePokemonUseCase {
     );
 
     if (totalCaptures >= 6) {
-      throw new AppError(
-        'O treinador já possui seis Pokémon na equipe.',
-        409,
-      );
+      throw new AppError('O treinador já possui seis Pokémon na equipe.', 409);
     }
 
     const pokemon = await this.pokeApiGateway.searchByName(pokemonName);

@@ -10,14 +10,10 @@ interface UpdateTrainerDTO {
 }
 
 export class UpdateTrainerUseCase {
-  constructor(
-    private trainerRepository: IPgTrainerRepository,
-  ) {}
+  constructor(private trainerRepository: IPgTrainerRepository) {}
 
   async execute(data: UpdateTrainerDTO): Promise<void> {
-    const existingTrainer = await this.trainerRepository.findById(
-      data.id,
-    );
+    const existingTrainer = await this.trainerRepository.findById(data.id);
 
     if (!existingTrainer) {
       throw new AppError('Treinador não encontrado.', 404);

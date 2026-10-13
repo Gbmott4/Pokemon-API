@@ -11,12 +11,7 @@ export class CreateTrainerUseCase {
   constructor(private trainerRepository: IPgTrainerRepository) {}
 
   async execute(data: CreateTrainerDTO): Promise<void> {
-    const trainer = new Trainer(
-      '',
-      data.name,
-      data.email,
-      data.city,
-    );
+    const trainer = new Trainer('', data.name, data.email, data.city);
 
     await this.trainerRepository.create(trainer);
   }

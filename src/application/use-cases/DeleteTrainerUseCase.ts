@@ -2,9 +2,7 @@ import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerReposi
 import { AppError } from '../../domain/errors/app-error';
 
 export class DeleteTrainerUseCase {
-  constructor(
-    private trainerRepository: IPgTrainerRepository,
-  ) {}
+  constructor(private trainerRepository: IPgTrainerRepository) {}
 
   async execute(id: string): Promise<void> {
     const trainer = await this.trainerRepository.findById(id);
