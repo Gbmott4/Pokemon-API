@@ -1,7 +1,6 @@
 import { Pokemon } from '../../domain/entities/pokemon';
-import { ResourceNotFoundError } from '../../domain/errors/ResourceNotFoundError';
 import { IPokemonRepository } from '../../domain/repositories/IPokemonRepository';
-import { AppError } from '@domain/errors/app-error'
+import { AppError } from '@domain/errors/app-error';
 
 export class GetPokemonByIdUseCase {
   constructor(private pokemonRepository: IPokemonRepository) {}

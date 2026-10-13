@@ -1,7 +1,7 @@
 import { Pokemon } from '../../domain/entities/pokemon';
 import { IPokemonRepository } from '../../domain/repositories/IPokemonRepository';
 import { CreatePokemonDTO } from '../dtos/CreatePokemonDTO';
-import { AppError } from '@domain/errors/app-error'
+import { AppError } from '@domain/errors/app-error';
 
 export class CreatePokemonUseCase {
   constructor(private pokemonRepository: IPokemonRepository) {}
@@ -20,6 +20,7 @@ export class CreatePokemonUseCase {
       data.hp,
       data.attack,
       data.defense,
+      data.level,
     );
 
     await this.pokemonRepository.create(pokemon);

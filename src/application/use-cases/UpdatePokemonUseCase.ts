@@ -1,7 +1,7 @@
 import { Pokemon } from '../../domain/entities/pokemon';
 import { IPokemonRepository } from '../../domain/repositories/IPokemonRepository';
 import { UpdatePokemonDTO } from '../dtos/UpdatePokemonDTO';
-import { AppError } from '@domain/errors/app-error'
+import { AppError } from '@domain/errors/app-error';
 
 export class UpdatePokemonUseCase {
   constructor(private pokemonRepository: IPokemonRepository) {}
@@ -20,6 +20,7 @@ export class UpdatePokemonUseCase {
       data.hp,
       data.attack,
       data.defense,
+      data.level,
     );
 
     await this.pokemonRepository.update(updatedPokemon);

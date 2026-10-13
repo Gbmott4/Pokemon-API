@@ -5,4 +5,5 @@ export interface UpdatePokemonDTO {
   hp: number;
   attack: number;
   defense: number;
+  level: number;
 }

@@ -253,6 +253,57 @@
           }
         }
       }
+    },
+    "/{id}/level": {
+      "patch": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Atualiza o nível de um Pokémon",
+        "description": "Atualiza somente o nível de um Pokémon existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do Pokémon"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nível atualizado com sucesso"
+          },
+          "400": {
+            "description": "Nível inválido"
+          },
+          "404": {
+            "description": "Pokémon não encontrado"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "level"
+                ],
+                "properties": {
+                  "level": {
+                    "type": "integer",
+                    "example": 10,
+                    "description": "Novo nível do Pokémon"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

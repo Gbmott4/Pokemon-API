@@ -1,6 +1,5 @@
-import { ResourceNotFoundError } from '../../domain/errors/ResourceNotFoundError';
 import { IPokemonRepository } from '../../domain/repositories/IPokemonRepository';
-import { AppError } from '@domain/errors/app-error'
+import { AppError } from '@domain/errors/app-error';
 
 export class DeletePokemonUseCase {
   constructor(private pokemonRepository: IPokemonRepository) {}
