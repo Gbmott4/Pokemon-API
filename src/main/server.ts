@@ -1,3 +1,4 @@
+
 import express, { NextFunction, Request, Response } from 'express';
 import { pokemonRoutes } from '../infrastructure/http/routes/pokemon-routes';
 import { swaggerUi, swaggerDocument } from './config/swagger';
@@ -18,8 +19,8 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(errorHandler);
 
-const PORT = 3333;
+const PORT = Number(process.env.PORT) || 3333;
 
-app.listen(PORT, () => {
-  console.log(`⚡️ [server]: API rodando em http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`⚡️ [server]: API rodando na porta ${PORT}`);
 });
