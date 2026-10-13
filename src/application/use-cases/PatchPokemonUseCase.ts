@@ -1,8 +1,7 @@
 import { Pokemon } from '../../domain/entities/pokemon';
-import { ResourceNotFoundError } from '../../domain/errors/ResourceNotFoundError';
 import { IPokemonRepository } from '../../domain/repositories/IPokemonRepository';
 import { PatchPokemonDTO } from '../dtos/PatchPokemonDTO';
-import { AppError } from '@domain/errors/app-error'
+import { AppError } from '@domain/errors/app-error';
 
 export class PatchPokemonUseCase {
   constructor(private pokemonRepository: IPokemonRepository) {}
@@ -21,6 +20,7 @@ export class PatchPokemonUseCase {
       data.hp ?? pokemon.hp,
       data.attack ?? pokemon.attack,
       data.defense ?? pokemon.defense,
+      data.level ?? pokemon.level,
     );
 
     await this.pokemonRepository.update(patchedPokemon);

@@ -6,6 +6,7 @@ export class Pokemon {
     public hp: number,
     public attack: number,
     public defense: number,
+    public level: number = 1,
   ) {
     if (hp <= 0) {
       throw new Error('HP deve ser maior que zero.');
@@ -17,6 +18,10 @@ export class Pokemon {
 
     if (defense <= 0) {
       throw new Error('Defense deve ser maior que zero.');
+    }
+
+    if (!Number.isInteger(level) || level <= 0) {
+      throw new Error('Level deve ser um número inteiro maior que zero.');
     }
   }
 }

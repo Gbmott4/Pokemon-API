@@ -28,6 +28,13 @@ export class InMemoryPokemonRepository implements IPokemonRepository {
       this.pokemons[index] = pokemon;
     }
   }
+async updateLevel(id: string, newLevel: number): Promise<void> {
+  const pokemon = this.pokemons.find((pokemon) => pokemon.id === id);
+
+  if (pokemon) {
+    pokemon.level = newLevel;
+  }
+}
   async delete(id: string): Promise<void> {
     const index = this.pokemons.findIndex((pokemon) => pokemon.id === id);
 
