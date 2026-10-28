@@ -73,6 +73,10 @@ const outputFile = path.resolve(__dirname, 'swagger-output.json');
 
 // Apontar para o server.ts faz o swagger-autogen seguir os app.use() e
 // documentar todas as rotas já com os prefixos corretos (/api/v1/...).
-const endpointsFiles = [path.resolve(__dirname, '../server.ts')];
+// O caminho precisa usar "/": no Windows o path.resolve usa barra invertida
+// e o swagger-autogen deixa de seguir os imports do server.ts.
+const endpointsFiles = [
+  path.resolve(__dirname, '../server.ts').split(path.sep).join('/'),
+];
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc);

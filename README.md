@@ -13,6 +13,21 @@ O projeto aplica **Clean Architecture**, persiste os dados em **PostgreSQL** com
 
 ---
 
+## ✅ Entrega 2: Persistência Relacional, Validação Zod e Integração PokéAPI
+
+| Requisito | Onde está |
+| --- | --- |
+| `GET /api/v1/pokedex/search?name=pikachu` retornando DTO formatado | `PokedexController` + `SearchPokemonUseCase` → `PokemonApiDTO` |
+| `POST /api/v1/trainers` (cadastro no banco) | `TrainerController` + `CreateTrainerUseCase` + `PrismaTrainerRepository` |
+| `POST /api/v1/trainers/:trainerId/captures` (PokéAPI + limite de 6 + salvar) | `CapturePokemonUseCase` |
+| `GET /api/v1/trainers/:trainerId/team` | `GetTrainerTeamController` + `GetTrainerTeamUseCase` |
+| `PrismaPokemonRepository` substituindo o InMemory sem alterar o domínio | `infrastructure/database/prisma/PrismaPokemonRepository.ts`, injetado em `main/factories/makePokemonController.ts` |
+| Interface `IPokeApiGateway` + implementação com Fetch em `infrastructure/providers/` | `domain/gateways/IPokeApiGateway.ts` e `infrastructure/providers/PokeApiGateway.ts` |
+| Validação de payload com Zod em todas as requisições | `infrastructure/http/schemas/` + middleware `validate-request.ts` |
+| Middleware global de erros (`AppError`) e exceções customizadas do domínio | `infrastructure/http/middlewares/error-handler.ts` e `domain/errors/` |
+
+---
+
 ## 🏛️ Arquitetura do Projeto
 
 O projeto segue a **Clean Architecture**: as regras de negócio ficam no centro e não dependem de Express, banco de dados ou APIs externas. As dependências sempre apontam para dentro.
