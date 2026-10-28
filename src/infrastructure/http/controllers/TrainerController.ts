@@ -15,7 +15,7 @@ export class TrainerController {
   async create(req: Request, res: Response) {
     const { name, email, city } = req.body;
 
-    await this.createTrainerUseCase.execute({
+    const trainer = await this.createTrainerUseCase.execute({
       name,
       email,
       city,
@@ -23,6 +23,7 @@ export class TrainerController {
 
     return res.status(201).json({
       message: 'Treinador cadastrado com sucesso!',
+      data: trainer,
     });
   }
 

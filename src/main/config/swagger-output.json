@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "title": "PokéManager API",
-    "description": "API para gerenciamento de catálogo de Pokémon"
+    "description": "API para gerenciamento de Pokémon, treinadores e capturas, integrada à PokéAPI oficial."
   },
   "servers": [
     {
@@ -13,17 +13,38 @@
   "tags": [
     {
       "name": "Pokemons",
-      "description": "Endpoints de gerenciamento de Pokémon"
+      "description": "Catálogo de Pokémon cadastrados no banco"
+    },
+    {
+      "name": "Trainers",
+      "description": "Cadastro de treinadores"
+    },
+    {
+      "name": "Pokedex",
+      "description": "Pesquisa de Pokémon na PokéAPI oficial"
+    },
+    {
+      "name": "Captures",
+      "description": "Captura de Pokémon e equipe dos treinadores"
     }
   ],
   "paths": {
-    "/": {
+    "/api/v1/pokemons/": {
       "get": {
         "tags": [
           "Pokemons"
         ],
         "summary": "Lista os Pokémon",
         "description": "Retorna todos os Pokémon cadastrados no catálogo.",
+        "parameters": [
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de Pokémon retornada com sucesso",
@@ -46,6 +67,15 @@
         ],
         "summary": "Cadastra um novo Pokémon",
         "description": "Adiciona um novo Pokémon ao catálogo.",
+        "parameters": [
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Pokémon cadastrado com sucesso"
@@ -73,7 +103,7 @@
         }
       }
     },
-    "/{id}": {
+    "/api/v1/pokemons/{id}": {
       "get": {
         "tags": [
           "Pokemons"
@@ -90,6 +120,13 @@
             },
             "description": "ID numérico do Pokémon",
             "example": 1
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -141,6 +178,13 @@
             },
             "description": "ID numérico do Pokémon",
             "example": 1
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -195,6 +239,13 @@
             },
             "description": "ID numérico do Pokémon",
             "example": 1
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -221,6 +272,20 @@
               }
             }
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parse(req": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "patch": {
@@ -239,6 +304,13 @@
             },
             "description": "ID numérico do Pokémon",
             "example": 1
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -278,7 +350,7 @@
         }
       }
     },
-    "/{id}/level": {
+    "/api/v1/pokemons/{id}/level": {
       "patch": {
         "tags": [
           "Pokemons"
@@ -295,6 +367,13 @@
             },
             "description": "ID numérico do Pokémon",
             "example": 1
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -338,6 +417,359 @@
           }
         }
       }
+    },
+    "/api/v1/trainers/": {
+      "post": {
+        "tags": [
+          "Trainers"
+        ],
+        "summary": "Cadastra um novo treinador",
+        "description": "Adiciona um treinador ao banco de dados. O ID é gerado automaticamente pelo PostgreSQL.",
+        "parameters": [
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Treinador cadastrado com sucesso"
+          },
+          "409": {
+            "description": "Já existe um treinador cadastrado com este e-mail"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "city"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Ash Ketchum"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "ash@example.com"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "Pallet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/trainers/{id}": {
+      "get": {
+        "tags": [
+          "Trainers"
+        ],
+        "summary": "Busca um treinador por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID do treinador",
+            "format": "uuid"
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treinador encontrado com sucesso"
+          },
+          "400": {
+            "description": "UUID inválido"
+          },
+          "404": {
+            "description": "Treinador não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Trainers"
+        ],
+        "summary": "Atualiza um treinador",
+        "description": "Atualiza o nome, e-mail e cidade de um treinador existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID do treinador",
+            "format": "uuid"
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treinador atualizado com sucesso"
+          },
+          "400": {
+            "description": "UUID ou dados inválidos"
+          },
+          "404": {
+            "description": "Treinador não encontrado"
+          },
+          "409": {
+            "description": "Já existe um treinador cadastrado com este e-mail"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "city"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Ash Ketchum"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "ash.updated@example.com"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "Viridian"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Trainers"
+        ],
+        "summary": "Exclui um treinador",
+        "description": "Remove um treinador cadastrado pelo seu UUID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID do treinador",
+            "format": "uuid"
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Treinador excluído com sucesso"
+          },
+          "400": {
+            "description": "UUID inválido"
+          },
+          "404": {
+            "description": "Treinador não encontrado"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "parse(req": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pokedex/search": {
+      "get": {
+        "tags": [
+          "Pokedex"
+        ],
+        "summary": "Pesquisa um Pokémon",
+        "description": "Pesquisa um Pokémon pelo nome na PokéAPI oficial.",
+        "parameters": [
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nome do Pokémon que deseja pesquisar",
+            "required": true,
+            "example": "pikachu",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pokémon encontrado com sucesso"
+          },
+          "400": {
+            "description": "Nome inválido ou não informado"
+          },
+          "404": {
+            "description": "Pokémon não encontrado na PokéAPI"
+          }
+        }
+      }
+    },
+    "/api/v1/trainers/{trainerId}/captures": {
+      "post": {
+        "tags": [
+          "Captures"
+        ],
+        "summary": "Captura um Pokémon",
+        "description": "Busca o Pokémon na PokéAPI oficial e registra a captura na equipe do treinador. Cada treinador pode ter no máximo 6 Pokémon.",
+        "parameters": [
+          {
+            "name": "trainerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID do treinador",
+            "format": "uuid"
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Pokémon capturado com sucesso"
+          },
+          "400": {
+            "description": "Dados de entrada inválidos"
+          },
+          "404": {
+            "description": "Treinador ou Pokémon não encontrado"
+          },
+          "409": {
+            "description": "O treinador já possui seis Pokémon na equipe"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "pokemonName"
+                ],
+                "properties": {
+                  "pokemonName": {
+                    "type": "string",
+                    "example": "pikachu"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/trainers/{trainerId}/team": {
+      "get": {
+        "tags": [
+          "Captures"
+        ],
+        "summary": "Lista a equipe de um treinador",
+        "description": "Retorna os Pokémon capturados pelo treinador (no máximo 6).",
+        "parameters": [
+          {
+            "name": "trainerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID do treinador",
+            "format": "uuid"
+          },
+          {
+            "name": "parse(req",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equipe retornada com sucesso"
+          },
+          "400": {
+            "description": "UUID inválido"
+          },
+          "404": {
+            "description": "Treinador não encontrado"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -355,7 +787,7 @@
           },
           "type": {
             "type": "string",
-            "example": "Electric"
+            "example": "ELECTRIC"
           },
           "hp": {
             "type": "number",
@@ -368,6 +800,10 @@
           "defense": {
             "type": "number",
             "example": 40
+          },
+          "level": {
+            "type": "number",
+            "example": 1
           }
         }
       },
@@ -384,7 +820,7 @@
           },
           "type": {
             "type": "string",
-            "example": "Electric"
+            "example": "ELECTRIC"
           },
           "hp": {
             "type": "number",
@@ -397,6 +833,10 @@
           "defense": {
             "type": "number",
             "example": 40
+          },
+          "level": {
+            "type": "number",
+            "example": 5
           }
         },
         "required": [
@@ -417,7 +857,7 @@
           },
           "type": {
             "type": "string",
-            "example": "Electric"
+            "example": "ELECTRIC"
           },
           "hp": {
             "type": "number",
@@ -430,6 +870,10 @@
           "defense": {
             "type": "number",
             "example": 45
+          },
+          "level": {
+            "type": "number",
+            "example": 10
           }
         },
         "required": [
@@ -443,32 +887,24 @@
       "PatchPokemonDto": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "Pikachu Turbo"
-          },
-          "type": {
-            "type": "string",
-            "example": "Electric"
-          },
           "hp": {
             "type": "number",
             "example": 70
-          },
-          "attack": {
-            "type": "number",
-            "example": 75
-          },
-          "defense": {
-            "type": "number",
-            "example": 45
           }
         }
       },
       "ErrorResponse": {
         "type": "object",
         "properties": {
-          "error": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "statusCode": {
+            "type": "number",
+            "example": 404
+          },
+          "message": {
             "type": "string",
             "example": "Pokémon não encontrado no catálogo."
           }

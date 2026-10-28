@@ -1,4 +1,4 @@
-import { PgPokemonRepository } from '../../infrastructure/database/postgres/PgPokemonRepository';
+import { PrismaPokemonRepository } from '../../infrastructure/database/prisma/PrismaPokemonRepository';
 import { PokemonController } from '../../infrastructure/http/controllers/PokemonController';
 import { ListPokemonsUseCase } from '../../application/use-cases/ListPokemonsUseCase';
 import { GetPokemonByIdUseCase } from '../../application/use-cases/GetPokemonByIdUseCase';
@@ -9,7 +9,7 @@ import { PatchPokemonUseCase } from '../../application/use-cases/PatchPokemonUse
 import { UpdatePokemonLevelUseCase } from '../../application/use-cases/UpdatePokemonLevelUseCase';
 
 export function makePokemonController() {
-  const pokemonRepository = new PgPokemonRepository();
+  const pokemonRepository = new PrismaPokemonRepository();
   const listPokemonsUseCase = new ListPokemonsUseCase(pokemonRepository);
   const getPokemonByIdUseCase = new GetPokemonByIdUseCase(pokemonRepository);
 

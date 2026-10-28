@@ -1,11 +1,11 @@
-import { AppError } from '../../domain/errors/app-error';
+import { NotFoundError } from '../../domain/errors/not-found-error';
 import { TrainerCapture } from '../../domain/entities/trainer-capture';
-import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerRepository';
+import { ITrainerRepository } from '../../domain/repositories/ITrainerRepository';
 import { ITrainerCaptureRepository } from '../../domain/repositories/ITrainerCaptureRepository';
 
 export class GetTrainerTeamUseCase {
   constructor(
-    private trainerRepository: IPgTrainerRepository,
+    private trainerRepository: ITrainerRepository,
     private captureRepository: ITrainerCaptureRepository,
   ) {}
 
@@ -13,7 +13,7 @@ export class GetTrainerTeamUseCase {
     const trainer = await this.trainerRepository.findById(trainerId);
 
     if (!trainer) {
-      throw new AppError('Treinador não encontrado.', 404);
+      throw new NotFoundError('Treinador não encontrado.');
     }
 
     return this.captureRepository.findByTrainerId(trainerId);

@@ -1,8 +1,8 @@
 import { Pokemon } from '../../../domain/entities/pokemon';
 import { IPokemonRepository } from '../../../domain/repositories/IPokemonRepository';
-import { prisma } from '../prisma/client';
+import { prisma } from './client';
 
-export class PgPokemonRepository implements IPokemonRepository {
+export class PrismaPokemonRepository implements IPokemonRepository {
   async findAll(): Promise<Pokemon[]> {
     const rows = await prisma.pokemons.findMany({
       orderBy: { name: 'asc' },

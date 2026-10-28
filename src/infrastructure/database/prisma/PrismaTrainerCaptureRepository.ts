@@ -1,8 +1,10 @@
 import { TrainerCapture } from '../../../domain/entities/trainer-capture';
 import { ITrainerCaptureRepository } from '../../../domain/repositories/ITrainerCaptureRepository';
-import { prisma } from '../prisma/client';
+import { prisma } from './client';
 
-export class PgTrainerCaptureRepository implements ITrainerCaptureRepository {
+export class PrismaTrainerCaptureRepository
+  implements ITrainerCaptureRepository
+{
   async create(capture: TrainerCapture): Promise<void> {
     await prisma.trainer_captures.create({
       data: {

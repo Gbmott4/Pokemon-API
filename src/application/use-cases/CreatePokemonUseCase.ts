@@ -1,7 +1,7 @@
 import { Pokemon } from '../../domain/entities/pokemon';
 import { IPokemonRepository } from '../../domain/repositories/IPokemonRepository';
 import { CreatePokemonDTO } from '../dtos/CreatePokemonDTO';
-import { AppError } from '@domain/errors/app-error';
+import { ConflictError } from '../../domain/errors/conflict-error';
 
 export class CreatePokemonUseCase {
   constructor(private pokemonRepository: IPokemonRepository) {}
@@ -10,7 +10,7 @@ export class CreatePokemonUseCase {
     const pokemonExists = await this.pokemonRepository.findById(data.id);
 
     if (pokemonExists) {
-      throw new AppError('Usuário com este e-mail já está cadastrado.', 400);
+      throw new ConflictError('Já existe um Pokémon cadastrado com este ID.');
     }
 
     const pokemon = new Pokemon(

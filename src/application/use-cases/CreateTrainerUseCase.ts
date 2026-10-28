@@ -1,5 +1,5 @@
 import { Trainer } from '../../domain/entities/trainer';
-import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerRepository';
+import { ITrainerRepository } from '../../domain/repositories/ITrainerRepository';
 
 interface CreateTrainerDTO {
   name: string;
@@ -8,11 +8,11 @@ interface CreateTrainerDTO {
 }
 
 export class CreateTrainerUseCase {
-  constructor(private trainerRepository: IPgTrainerRepository) {}
+  constructor(private trainerRepository: ITrainerRepository) {}
 
-  async execute(data: CreateTrainerDTO): Promise<void> {
+  async execute(data: CreateTrainerDTO): Promise<Trainer> {
     const trainer = new Trainer('', data.name, data.email, data.city);
 
-    await this.trainerRepository.create(trainer);
+    return this.trainerRepository.create(trainer);
   }
 }

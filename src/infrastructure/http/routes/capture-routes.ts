@@ -6,44 +6,6 @@ import { capturePokemonSchema } from '../schemas/pokemon-schemas';
 
 const captureRoutes = Router();
 
-/**
- * @swagger
- * /api/v1/trainers/{trainerId}/captures:
- *   post:
- *     tags:
- *       - Captures
- *     summary: Captura um Pokémon
- *     description: Busca um Pokémon na PokéAPI e registra sua captura para um treinador.
- *     parameters:
- *       - in: path
- *         name: trainerId
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *         description: UUID do treinador
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - pokemonName
- *             properties:
- *               pokemonName:
- *                 type: string
- *                 example: pikachu
- *     responses:
- *       201:
- *         description: Pokémon capturado com sucesso
- *       400:
- *         description: Dados de entrada inválidos
- *       404:
- *         description: Treinador ou Pokémon não encontrado
- *       409:
- *         description: Pokémon já capturado pelo treinador
- */
 captureRoutes.post(
   '/:trainerId/captures',
   validateRequest({
@@ -51,6 +13,51 @@ captureRoutes.post(
     body: capturePokemonSchema.shape.body,
   }),
   async (req, res, next) => {
+    /*
+      #swagger.tags = ['Captures']
+      #swagger.summary = 'Captura um Pokémon'
+      #swagger.description = 'Busca o Pokémon na PokéAPI oficial e registra a captura na equipe do treinador. Cada treinador pode ter no máximo 6 Pokémon.'
+
+      #swagger.parameters['trainerId'] = {
+        in: 'path',
+        description: 'UUID do treinador',
+        required: true,
+        type: 'string',
+        format: 'uuid'
+      }
+
+      #swagger.requestBody = {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              required: ['pokemonName'],
+              properties: {
+                pokemonName: { type: 'string', example: 'pikachu' }
+              }
+            }
+          }
+        }
+      }
+
+      #swagger.responses[201] = {
+        description: 'Pokémon capturado com sucesso'
+      }
+
+      #swagger.responses[400] = {
+        description: 'Dados de entrada inválidos'
+      }
+
+      #swagger.responses[404] = {
+        description: 'Treinador ou Pokémon não encontrado'
+      }
+
+      #swagger.responses[409] = {
+        description: 'O treinador já possui seis Pokémon na equipe'
+      }
+    */
+
     try {
       const useCase = makeCapturePokemonController();
       const controller = new CapturePokemonController(useCase);

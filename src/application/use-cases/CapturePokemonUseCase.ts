@@ -1,8 +1,11 @@
-import { AppError } from '../../domain/errors/app-error';
+import { NotFoundError } from '../../domain/errors/not-found-error';
+import { ConflictError } from '../../domain/errors/conflict-error';
+import { BadRequestError } from '../../domain/errors/bad-request-error';
 import { TrainerCapture } from '../../domain/entities/trainer-capture';
-import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerRepository';
+import { ITrainerRepository } from '../../domain/repositories/ITrainerRepository';
 import { ITrainerCaptureRepository } from '../../domain/repositories/ITrainerCaptureRepository';
-import { PokeApiGateway } from '../../infrastructure/providers/PokeApiGateway';
+import { IPokeApiGateway } from '../../domain/gateways/IPokeApiGateway';
+
 interface CapturePokemonDTO {
   trainerId: string;
   pokemonName: string;
@@ -10,22 +13,22 @@ interface CapturePokemonDTO {
 
 export class CapturePokemonUseCase {
   constructor(
-    private trainerRepository: IPgTrainerRepository,
+    private trainerRepository: ITrainerRepository,
     private captureRepository: ITrainerCaptureRepository,
-    private pokeApiGateway: PokeApiGateway,
+    private pokeApiGateway: IPokeApiGateway,
   ) {}
 
   async execute(data: CapturePokemonDTO): Promise<TrainerCapture> {
     const trainer = await this.trainerRepository.findById(data.trainerId);
 
     if (!trainer) {
-      throw new AppError('Treinador não encontrado.', 404);
+      throw new NotFoundError('Treinador não encontrado.');
     }
 
     const pokemonName = data.pokemonName.trim().toLowerCase();
 
     if (!pokemonName) {
-      throw new AppError('O nome do Pokémon é obrigatório.', 400);
+      throw new BadRequestError('O nome do Pokémon é obrigatório.');
     }
 
     const totalCaptures = await this.captureRepository.countByTrainerId(
@@ -33,13 +36,13 @@ export class CapturePokemonUseCase {
     );
 
     if (totalCaptures >= 6) {
-      throw new AppError('O treinador já possui seis Pokémon na equipe.', 409);
+      throw new ConflictError('O treinador já possui seis Pokémon na equipe.');
     }
 
     const pokemon = await this.pokeApiGateway.searchByName(pokemonName);
 
     if (!pokemon) {
-      throw new AppError('Pokémon não encontrado na PokéAPI.', 404);
+      throw new NotFoundError('Pokémon não encontrado na PokéAPI.');
     }
 
     const capture = new TrainerCapture(
