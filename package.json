@@ -1,16 +1,18 @@
 {
   "name": "pokemon-manager-api",
   "version": "1.0.0",
-  "description": "O HTTP (Hypertext Transfer Protocol) é o protocolo de comunicação utilizado na web. Ele define como as mensagens são formatadas e transmitidas entre clientes (como navegadores ou aplicativos) e servidores. O HTTP é baseado em um modelo de requisição e resposta, onde o cliente envia uma requisição ao servidor, que processa a solicitação e retorna uma resposta.",
+  "description": "API REST para gerenciamento de Pokémon, treinadores e capturas, com Clean Architecture, PostgreSQL/Prisma e integração com a PokéAPI.",
   "main": "index.js",
   "scripts": {
     "swagger": "tsx src/main/config/swagger-generator.ts",
     "start": "npm run swagger && tsx watch src/main/server.ts",
     "build": "npm run swagger && tsc",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts",
+    "prisma:generate": "prisma generate",
+    "db:push": "prisma db push"
   },
   "keywords": [],
-  "author": "",
+  "author": "Gabriel Neves Motta Oliveira",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^5.0.6",
@@ -38,11 +40,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CarlosEduAC/express-sample.git"
+    "url": "git+https://github.com/Gbmott4/Pokemon-menager-API.git"
   },
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/CarlosEduAC/express-sample/issues"
+    "url": "https://github.com/Gbmott4/Pokemon-menager-API/issues"
   },
-  "homepage": "https://github.com/CarlosEduAC/express-sample#readme"
+  "homepage": "https://github.com/Gbmott4/Pokemon-menager-API#readme"
 }

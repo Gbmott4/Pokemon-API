@@ -1,27 +1,34 @@
 import { Trainer } from '../../../domain/entities/trainer';
-import { IPgTrainerRepository } from '../../../domain/repositories/IPgTrainerRepository';
-import { AppError } from '../../../domain/errors/app-error';
-import { prisma } from '../prisma/client';
+import { ITrainerRepository } from '../../../domain/repositories/ITrainerRepository';
+import { ConflictError } from '../../../domain/errors/conflict-error';
+import { prisma } from './client';
 import { Prisma } from '@prisma/client';
 
-export class PgTrainerRepository implements IPgTrainerRepository {
-  async create(trainer: Trainer): Promise<void> {
+export class PrismaTrainerRepository implements ITrainerRepository {
+  async create(trainer: Trainer): Promise<Trainer> {
     try {
-      await prisma.trainers.create({
+      const row = await prisma.trainers.create({
         data: {
           name: trainer.name,
           email: trainer.email,
           city: trainer.city,
         },
       });
+
+      return new Trainer(
+        row.id,
+        row.name,
+        row.email,
+        row.city,
+        row.created_at ?? undefined,
+      );
     } catch (error: unknown) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
       ) {
-        throw new AppError(
+        throw new ConflictError(
           'Já existe um Treinador cadastrado com este e-mail.',
-          409,
         );
       }
 
@@ -44,9 +51,8 @@ export class PgTrainerRepository implements IPgTrainerRepository {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
       ) {
-        throw new AppError(
+        throw new ConflictError(
           'Já existe um Treinador cadastrado com este e-mail.',
-          409,
         );
       }
 

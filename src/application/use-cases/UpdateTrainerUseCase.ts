@@ -1,6 +1,6 @@
 import { Trainer } from '../../domain/entities/trainer';
-import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerRepository';
-import { AppError } from '../../domain/errors/app-error';
+import { ITrainerRepository } from '../../domain/repositories/ITrainerRepository';
+import { NotFoundError } from '../../domain/errors/not-found-error';
 
 interface UpdateTrainerDTO {
   id: string;
@@ -10,13 +10,13 @@ interface UpdateTrainerDTO {
 }
 
 export class UpdateTrainerUseCase {
-  constructor(private trainerRepository: IPgTrainerRepository) {}
+  constructor(private trainerRepository: ITrainerRepository) {}
 
   async execute(data: UpdateTrainerDTO): Promise<void> {
     const existingTrainer = await this.trainerRepository.findById(data.id);
 
     if (!existingTrainer) {
-      throw new AppError('Treinador não encontrado.', 404);
+      throw new NotFoundError('Treinador não encontrado.');
     }
 
     const trainer = new Trainer(

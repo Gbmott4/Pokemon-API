@@ -1,5 +1,6 @@
 import { IPokemonRepository } from '../../domain/repositories/IPokemonRepository';
-import { AppError } from '@domain/errors/app-error';
+import { NotFoundError } from '../../domain/errors/not-found-error';
+import { BadRequestError } from '../../domain/errors/bad-request-error';
 
 export class UpdatePokemonLevelUseCase {
   constructor(private pokemonRepository: IPokemonRepository) {}
@@ -8,13 +9,12 @@ export class UpdatePokemonLevelUseCase {
     const pokemon = await this.pokemonRepository.findById(id);
 
     if (!pokemon) {
-      throw new AppError('Pokémon não encontrado no catálogo.', 404);
+      throw new NotFoundError('Pokémon não encontrado no catálogo.');
     }
 
     if (!Number.isInteger(newLevel) || newLevel <= 0) {
-      throw new AppError(
+      throw new BadRequestError(
         'O nível deve ser um número inteiro maior que zero.',
-        400,
       );
     }
 

@@ -22,6 +22,27 @@ export const pokemonTypeSchema = z.enum([
   'FAIRY',
 ]);
 
+// Aceita o tipo em qualquer formato ("Electric", "electric", "ELECTRIC")
+// e o normaliza para maiúsculas antes de validar.
+const pokemonTypeInputSchema = z
+  .string()
+  .trim()
+  .toUpperCase()
+  .pipe(pokemonTypeSchema);
+
+// Atributos de batalha (HP, ataque e defesa)
+const statSchema = (label: string) =>
+  z
+    .number()
+    .int(`${label} deve ser um número inteiro`)
+    .positive(`${label} deve ser maior que zero`);
+
+const levelSchema = z
+  .number()
+  .int('O nível deve ser um número inteiro')
+  .min(1, 'O nível mínimo é 1')
+  .max(100, 'O nível máximo é 100');
+
 // Parâmetro de ID nas rotas
 export const pokemonIdParamsSchema = z.object({
   id: z
@@ -30,25 +51,34 @@ export const pokemonIdParamsSchema = z.object({
     .transform(Number),
 });
 
-// Criação de Pokémon
-export const createPokemonSchema = z.object({
+// Campos comuns de um Pokémon (sem o ID, que vem da URL no PUT/PATCH)
+const pokemonDataSchema = z.object({
   name: z.string().trim().min(2, 'O nome deve ter no mínimo 2 caracteres'),
-  type: pokemonTypeSchema,
-  level: z
-    .number()
-    .int('O nível deve ser um número inteiro')
-    .min(1, 'O nível mínimo é 1')
-    .max(100, 'O nível máximo é 100'),
-  trainerId: z.string().uuid('O trainerId deve ser um UUID válido').optional(),
+  type: pokemonTypeInputSchema,
+  hp: statSchema('HP'),
+  attack: statSchema('Attack'),
+  defense: statSchema('Defense'),
+  level: levelSchema,
+});
+
+// Criação de Pokémon (POST): o ID é informado no corpo
+export const createPokemonSchema = pokemonDataSchema.extend({
+  id: z
+    .string()
+    .trim()
+    .regex(/^[1-9]\d*$/, 'O ID do Pokémon deve ser um número inteiro positivo'),
+  level: levelSchema.default(1),
 });
 
 export type CreatePokemonInput = z.infer<typeof createPokemonSchema>;
 
 // Atualização completa (PUT)
-export const updatePokemonSchema = createPokemonSchema;
+export const updatePokemonSchema = pokemonDataSchema.extend({
+  level: levelSchema.default(1),
+});
 
 // Atualização parcial (PATCH)
-export const patchPokemonSchema = createPokemonSchema
+export const patchPokemonSchema = pokemonDataSchema
   .partial()
   .refine(
     (data) => Object.keys(data).length > 0,
@@ -60,16 +90,12 @@ export type PatchPokemonInput = z.infer<typeof patchPokemonSchema>;
 
 // Atualização somente do nível
 export const updatePokemonLevelSchema = z.object({
-  level: z
-    .number()
-    .int('O nível deve ser um número inteiro')
-    .min(1, 'O nível mínimo é 1')
-    .max(100, 'O nível máximo é 100'),
+  level: levelSchema,
 });
 
 // Listagem e filtros
 export const listPokemonsQuerySchema = z.object({
-  type: pokemonTypeSchema.optional(),
+  type: pokemonTypeInputSchema.optional(),
 
   minLevel: z
     .string()

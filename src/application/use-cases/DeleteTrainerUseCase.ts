@@ -1,14 +1,14 @@
-import { IPgTrainerRepository } from '../../domain/repositories/IPgTrainerRepository';
-import { AppError } from '../../domain/errors/app-error';
+import { ITrainerRepository } from '../../domain/repositories/ITrainerRepository';
+import { NotFoundError } from '../../domain/errors/not-found-error';
 
 export class DeleteTrainerUseCase {
-  constructor(private trainerRepository: IPgTrainerRepository) {}
+  constructor(private trainerRepository: ITrainerRepository) {}
 
   async execute(id: string): Promise<void> {
     const trainer = await this.trainerRepository.findById(id);
 
     if (!trainer) {
-      throw new AppError('Treinador não encontrado.', 404);
+      throw new NotFoundError('Treinador não encontrado.');
     }
 
     await this.trainerRepository.delete(id);
